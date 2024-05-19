@@ -128,6 +128,57 @@ for (auto [cnt, se] : mp2) {
 }
 ```
 
+### 4.4 Python拓展
+
+```python
+import requests
+from bs4 import BeautifulSoup
+
+# 定义一个函数来获取单个URL的HTML内容
+def get_html(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # 检查请求是否成功
+        return response.text
+    except requests.RequestException as e:
+        print(f"Error fetching {url}: {e}")
+        return None
+
+# 定义一个函数来解析HTML内容
+def parse_html(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    # 在这里可以进行更多的解析操作，例如提取特定内容
+    return soup
+
+# 爬取多个URL
+def crawl_urls(urls):
+    results = {}
+    for url in urls:
+        print(f"Fetching {url}")
+        html = get_html(url)
+        if html:
+            soup = parse_html(html)
+            results[url] = soup
+    return results
+
+# 示例URL列表
+urls = [
+    "https://www.example.com",
+    "https://www.example.org",
+    "https://www.example.net",
+]
+
+# 开始爬取
+results = crawl_urls(urls)
+
+# 打印每个URL的标题
+for url, soup in results.items():
+    print(f"Title of {url}: {soup.title.string if soup.title else 'No title'}")
+
+```
+
+
+
 ## 5 测试与结果
 
 ### 5.1 测试方法
